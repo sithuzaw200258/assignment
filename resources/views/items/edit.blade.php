@@ -210,6 +210,10 @@
                             @enderror
                         </div>
 
+                        <div class="mb-5">
+                            <div id="map"></div>
+                        </div>
+
                         <div class="text-end">
                             <a href="{{ route('items.index') }}"
                                 class="hover:shadow-form rounded-md  py-2 px-8 text-base font-semibold text-violet-600 outline-none">
@@ -227,3 +231,40 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+
+    <script type="module">
+        ClassicEditor
+            .create(document.querySelector('#description'), {
+                placeholder: 'Enter Description'
+            })
+            .catch(error => {
+                console.error(error);
+            });
+            
+        var map = L.map('map').setView([16.8409, 96.1735], 12);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var marker = L.marker([16.8409, 96.1735]).addTo(map);
+
+        var circle = L.circle([16.8409, 96.1735], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 500
+        }).addTo(map);
+
+
+        googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        }).addTo(map);
+
+        L.Control.geocoder().addTo(map);
+    </script>
+@endpush
+
